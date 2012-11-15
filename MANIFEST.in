@@ -1,0 +1,3 @@
+recursive-include src/lolo/var/www/lolo/images *
+recursive-include src/lolo/var/www/lolo/json *
+exclude src/lolo/var/www/lolo/images/status.png
