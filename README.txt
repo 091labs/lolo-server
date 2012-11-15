@@ -1,8 +1,8 @@
-=====
-Lolo
-=====
+===========
+lolo-server
+===========
 
-The goal of Lolo is to track when 091 Labs is open.
+The goal of LoLo is to track when 091 Labs is open.
 
 Downloads
 =========
@@ -10,91 +10,100 @@ Downloads
 Driver: http://libk8055.sourceforge.net/
 Python: http://sourceforge.net/projects/python-k8055/
 
-How this works:
-===============
+How this works
+==============
 
-In advance of installing lolo itself, you need to install and set a few other areas...
+In advance of installing lolo-server itself, you need to install and setup a few other areas so the board can be detected and controlled by Ubuntu.
 
-Further down, I've areas marked with <code></code> - the stuff inside those tags is what should be entered... or something close to it depending on your settings.
+libk8055
+--------
 
-~~~~~~~~~
-libk8055:
-~~~~~~~~~
+This is for setting up a Velleman k8055 prototyping board to work with Ubuntu
 
-sudo apt-get install build-essential libusb-dev
+Make sure you have build-essential and libusb first::
 
-download from site and go to extracted driver folder
+	sudo apt-get install build-essential libusb-dev
 
-vim Makefile and remove the '?' from line 7: "PREFIX = ?/usr/local"
+Download from site and go to extracted driver folder::
 
-make all
-sudo make install
+	vim Makefile and remove the '?' from line 7: "PREFIX = ?/usr/local"
 
-~~~~~
-udev:
-~~~~~
+	make all
+	sudo make install
 
-The usb device permissions can be set in udev:
+udev
+----
 
-Plug in the device and then run 'lsusb' 
-Check for the idVendor (before ':') and idProduct (after ':') values in the ID section. They may be the same as below.
+The usb device permissions can be set in udev.
 
-cd /etc/udev/rules.d
+Plug in the device and then run::
 
-<code>
-sudo echo SUBSYSTEM=="usb", ATTR{idVendor}=="10cf", ATTR{idProduct}=="5500", MODE="0666" >/etc/udev/rules.d/k8055.rules
-</code>
+	lsusb
+	
+Check for the idVendor (before ':') and idProduct (after ':') values in the ID section. They may be the same as below.::
+
+	cd /etc/udev/rules.d
+
+	sudo echo SUBSYSTEM=="usb", ATTR{idVendor}=="10cf", ATTR{idProduct}=="5500", MODE="0666" >/etc/udev/rules.d/k8055.rules
 
 !!
 !!  need to change the k8055.rules to include command to run upstart job
 !!
 
-Plug out the device and reboot udev - 'service udev restart'
+Plug out the device and reboot udev::
 
-'k8055' in command line to test
+	service udev restart
 
-~~~~~~~~~~~~~
-python-k8055:
-~~~~~~~~~~~~~
+Run::
 
-cd <extracted folder>
+	k8055
 
-python setup.py build
-sudo python setup.py install
+in command line to test
 
-~~~~~~~~
-upstart: ---- is upstart needed? Can run the file straight from udev...
-~~~~~~~~
+python-k8055
+------------
 
-New-age cronjob!
+Extract the folder and install program::
 
-cd /etc/init/
-vim lolo.conf
+	cd <extracted folder>
 
-<code>
-# lolo - Labs On ; Labs Off
-#
-# Status updater for 091 Labs
-#
+	python setup.py build
+	sudo python setup.py install
 
-author "author name <author@email>"
-description "091 Labs status updater"
+upstart
+-------
 
-start on startup
+New-age cronjob!::
 
-# run Lolo
-exec python /usr/local/lib/python2.7/dist-packages/lolo/lolo.pyc
+	cd /etc/init/
+	vim lolo.conf
 
-respawn
-respawn limit 10 90
-</code>
+Insert::
+	
+	# lolo - Labs On ; Labs Off
+	#
+	# Status updater for 091 Labs
+	#
 
-~~~~~
-lolo:
-~~~~~
+	author "author name <author@email>"
+	description "091 Labs status updater"
 
-sudo easy_install lolo<version>.tgz
-'locate lolo'
+	start on startup
+
+	# run Lolo
+	exec python /usr/local/lib/python2.7/dist-packages/lolo/lolo.pyc
+
+	respawn
+	respawn limit 10 90
+
+lolo
+----
+
+Installing LoLo to Ubuntu::
+
+	sudo easy_install lolo<version>.tgz
+	locate lolo
+
 Select the one that starts with /usr/local/lib, /usr/lib, or something similar probably also mentioning Python. 
 
 
@@ -102,21 +111,21 @@ Select the one that starts with /usr/local/lib, /usr/lib, or something similar p
 Changing headers for CORS:
 ==========================
 
-into your Apache server httpd.conf (or your .htaccess file of choice)
+For the SpaceAPI json file.
+Into your Apache server httpd.conf (or your .htaccess file of choice)::
 
-<code>
-<Directory (your full pathname)>
-	<Files ##################################### <- UNFINISHED!!!>
-        Header set Access-Control-Allow-Origin "*"
-        Header set Cache-Control "no-cache"
-	</Files>
-</Directory>
-</code>
+	<Directory (your full pathname)>
+		<Files ##################################### <- UNFINISHED!!!>
+		    Header set Access-Control-Allow-Origin "*"
+		    Header set Cache-Control "no-cache"
+		</Files>
+	</Directory>
 
 ==================================
 Changing desktop for boredom sake:
 ==================================
 
-<code>
-subprocess.call(["gsettings","set","org.gnome.desktop.background","picture-uri","'file://"+self.PREFIX+"lolo/images/closed.png'"])
-</code>
+This was done at MakerFaire simply to make the change more visible to people passing the stall.::
+
+	subprocess.call(["gsettings","set","org.gnome.desktop.background","picture-uri","'file://"+self.PREFIX+"lolo/images/closed.png'"])
+
