@@ -114,18 +114,23 @@ Changing headers for CORS:
 For the SpaceAPI json file.
 Into your Apache server httpd.conf (or your .htaccess file of choice)::
 
-	<Directory (your full pathname)>
-		<Files ##################################### <- UNFINISHED!!!>
-		    Header set Access-Control-Allow-Origin "*"
-		    Header set Cache-Control "no-cache"
-		</Files>
+	<Directory /var/www/lolo/json>
+		    <Files "status.json">
+		            Header set Access-Control-Allow-Origin "*"
+		            Header set Cache-Control "no-cache"
+		    </Files>
 	</Directory>
 
 ==================================
 Changing desktop for boredom sake:
 ==================================
 
-This was done at MakerFaire simply to make the change more visible to people passing the stall.::
+This was done at MakerFaire simply to make the change more visible to people passing the stall.
+
+Add the each of the following::
 
 	subprocess.call(["gsettings","set","org.gnome.desktop.background","picture-uri","'file://"+self.PREFIX+"lolo/images/closed.png'"])
 
+	subprocess.call(["gsettings","set","org.gnome.desktop.background","picture-uri","'file://"+self.PREFIX+"lolo/images/open.png'"])
+
+... to the appropriate side of the if...else within the change_status() function in status.py
