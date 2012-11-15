@@ -44,11 +44,8 @@ Check for the idVendor (before ':') and idProduct (after ':') values in the ID s
 
 	cd /etc/udev/rules.d
 
-	sudo echo SUBSYSTEM=="usb", ATTR{idVendor}=="10cf", ATTR{idProduct}=="5500", MODE="0666" >/etc/udev/rules.d/k8055.rules
+	SUBSYSTEM==usb, ATTR{idVendor}==10cf, ATTR{idProduct}==5500, MODE=0666 RUN+="/usr/local/lib/python2.7/dist-packages/lolo-0.2-py2.7.egg/lolo/button.py"
 
-!!
-!!  need to change the k8055.rules to include command to run upstart job
-!!
 
 Plug out the device and reboot udev::
 
@@ -99,13 +96,10 @@ Insert::
 lolo
 ----
 
-Installing LoLo to Ubuntu::
-
-	sudo easy_install lolo<version>.tgz
-	locate lolo
-
-Select the one that starts with /usr/local/lib, /usr/lib, or something similar probably also mentioning Python. 
-
+Installing lolo-server to Ubuntu::
+ 
+ 	sudo apt-get install python-setuptools python-dev build-essential 
+	sudo easy_install https://github.com/091labs/lolo-server/archive/master.zip
 
 ==========================
 Changing headers for CORS:
