@@ -11,43 +11,41 @@ class LoloStatus():
 		self.PREFIX = "/var/www/"
 		self.FILENAME = self.PREFIX + "lolo/json/status.json"
 
+	'''Toggles Labs open/closed'''
 	def change_status(self, board=False):
-		'''Changes status'''
-	
-		# pulls in previous Labs status (reads from JSON file)
+		# Pulls in previous Labs status (reads from JSON file)
 		status = self.load_status()
 
-		# changes status between open & closed (Boolean)
-		# toggles symbolic link between open & closed image as current status image
+		# Changes status between open & closed (Boolean).
+		# Toggles symbolic link between open & closed image as current status image.
 		if status['open'] is True:
 			status['open'] = False
-			status['status'] = "091 Labs is closed atm!"
-			subprocess.call(["ln","-sf",self.PREFIX+"lolo/images/closed.png",self.PREFIX+"lolo/images/status.png"])
+			status['status'] = "091 Labs is closed."
+			subprocess.call(["ln", "-sf", self.PREFIX+"lolo/images/closed.png", self.PREFIX+"lolo/images/status.png"])
 			if board:
 				board.set_digital_outputs([0,1,0,0,0,0,0,0])
 		else:
 			status['open'] = True
-			status['status'] = "091 Labs is open!"
-			subprocess.call(["ln","-sf",self.PREFIX+"lolo/images/open.png",self.PREFIX+"lolo/images/status.png"])
+			status['status'] = "091 Labs is open."
+			subprocess.call(["ln", "-sf", self.PREFIX+"lolo/images/open.png", self.PREFIX+"lolo/images/status.png"])
 			if board:
 				board.set_digital_outputs([1,0,0,0,0,0,0,0])
 		
-		# saves time and sends on the current Labs status (writes back to JSON file)
+		# Saves time and sends on the current Labs status (writes back to JSON file).
 		status['lastchange'] = int(time.time())
 		self.save_status(status)
 
+	'''Loads JSON data from FILENAME'''
 	def load_status(self):
-		'''Loads JSON data from FILENAME'''
-	
 		with open(self.FILENAME, "r") as FILE:
 			data = FILE.read()		
-		return json.loads(data)		# JSON formatted data converted in python object
+		return json.loads(data)		# JSON-formatted data converted into Python object.
 	
+	'''Writes JSON data to FILENAME'''
 	def save_status(self, status):
-		'''Writes JSON data to FILENAME'''
 	
 		with open(self.FILENAME, "w") as FILE:
-			data = json.dumps(status)	# python object converted into JSON formatted data
+			data = json.dumps(status)	# Python object converted into JSON-formatted data.
 			FILE.write(data)
 			
 def main():
