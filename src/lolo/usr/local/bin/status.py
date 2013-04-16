@@ -11,8 +11,9 @@ class LoloStatus():
 		self.PREFIX = "/var/www/"
 		self.FILENAME = self.PREFIX + "lolo/json/status.json"
 
-	'''Toggles Labs open/closed'''
 	def change_status(self, board=False):
+		'''Toggles Labs open/closed'''
+
 		# Pulls in previous Labs status (reads from JSON file)
 		status = self.load_status()
 
@@ -35,15 +36,16 @@ class LoloStatus():
 		status['lastchange'] = int(time.time())
 		self.save_status(status)
 
-	'''Loads JSON data from FILENAME'''
 	def load_status(self):
+		'''Loads JSON data from FILENAME'''
+
 		with open(self.FILENAME, "r") as FILE:
 			data = FILE.read()		
 		return json.loads(data)		# JSON-formatted data converted into Python object.
 	
-	'''Writes JSON data to FILENAME'''
 	def save_status(self, status):
-	
+		'''Writes JSON data to FILENAME'''
+
 		with open(self.FILENAME, "w") as FILE:
 			data = json.dumps(status)	# Python object converted into JSON-formatted data.
 			FILE.write(data)
